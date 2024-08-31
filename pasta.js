@@ -328,8 +328,7 @@ function loadEvent() {
         }
         if (i.innerText == "오늘") {
             i.addEventListener("click", () =>
-                orderV(
-                    0,
+                location.replace(
                     `https://playentry.org/community/entrystory/list${
                         location.search.split("term")[0]
                     }term${
@@ -342,8 +341,7 @@ function loadEvent() {
         }
         if (i.innerText == "최근 1주일") {
             i.addEventListener("click", () =>
-                orderV(
-                    0,
+                location.replace(
                     `https://playentry.org/community/entrystory/list${
                         location.search.split("term")[0]
                     }term${
@@ -356,8 +354,7 @@ function loadEvent() {
         }
         if (i.innerText == "최근 1개월") {
             i.addEventListener("click", () =>
-                orderV(
-                    0,
+                location.replace(
                     `https://playentry.org/community/entrystory/list${
                         location.search.split("term")[0]
                     }term${
@@ -370,8 +367,7 @@ function loadEvent() {
         }
         if (i.innerText == "최근 3개월") {
             i.addEventListener("click", () =>
-                orderV(
-                    0,
+                location.replace(
                     `https://playentry.org/community/entrystory/list${
                         location.search.split("term")[0]
                     }term${
