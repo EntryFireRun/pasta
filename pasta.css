@@ -1,0 +1,72 @@
+.imageUpload {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    background-image: url(https://playentry.org/img/IcoCmtPicture.svg);
+    margin-right: 14px;
+    background-size: 20px;
+    background-repeat: no-repeat;
+    vertical-align: top;
+    transition: background-image 0.3s;
+}
+
+@media (max-width: 767px) {
+    .imageUpload {
+        width: 20px;
+        height: 20px;
+        margin-left: 0px;
+        background-size: 20px;
+    }
+}
+
+@media (max-width: 1199px) {
+    .imageUpload {
+        width: 22px;
+        height: 22px;
+        margin-left: 0px;
+        background-size: 22px;
+    }
+}
+
+.imageUpload:hover {
+    background-image: url(https://playentry.org/uploads/확프/사진/확프사진온.svg) !important;
+}
+
+.contentButton {
+    display: inline-block;
+    width: 20px;
+    margin-right: 14px;
+    height: 20px;
+    background-image: url(https://playentry.org/img/IcoCmtPicture.svg);
+    background-size: 20px;
+    vertical-align: top;
+    transition: background-image 0.3s;
+    background-repeat: no-repeat;
+}
+
+.contentButton:hover {
+    background-image: url(https://playentry.org/uploads/확프/사진/확프사진온.svg) !important;
+}
+
+.contentButtonImage {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    margin-right: 14px;
+    background-image: url(/img/IcoCmtPicture.svg);
+    background-size: 20px;
+    vertical-align: top;
+    transition: background-image 0.3s;
+    background-repeat: no-repeat;
+}
+
+.contentButtonImage:hover {
+    background-image: url(https://playentry.org/uploads/확프/사진/확프사진온.svg);
+}
+
+.realImage {
+    max-width: 90%;
+    max-height: 374px;
+    border-radius: 10px;
+    margin: 5px 0 5px 2px;
+}
