@@ -110,48 +110,50 @@ function blockButton(target, isblock = false) {
 
 function LinkToImage() {
     document.querySelectorAll("a:not(.NoFind)").forEach((i) => {
-        if (
-            /^https:\/\/playentry.org\/redirect\?external=https:\/\/ifh.cc\/(g\/|i-|v-).*$/g.test(
-                i.href
-            )
-        ) {
-            i.className = "NoFind";
-            i.href
-                .slice(57)
-                .split(".")
-                .forEach((j) => {
-                    if (j.length == "6") {
-                        if (i.innerHTML.indexOf("img") == -1) i.innerHTML = "";
-                        i.innerHTML += `<div><img style="outline: 1px solid red;" class="realImage" onerror="this.parentNode.innerHTML = '<video style=&quot;outline: 1px solid red;&quot; class=&quot;realImage&quot; controls><source src=&quot;https://ifh.cc/g/${j}&quot;></video>'" src="https://ifh.cc/g/${j}"></img></div>`;
-                        if (
-                            localStorage.getItem(
-                                `pastaUser_${i.parentNode.parentNode.firstChild.href.slice(
-                                    "30"
-                                )}`
-                            ) != null
-                        ) {
-                            i.href = `chrome-extension://${chrome.runtime.id}/blockImage.png`;
-                            i.innerHTML = `<div><img style="outline: 1px solid black;" class="realImage" src="chrome-extension://${chrome.runtime.id}/blockImage.png"></img></div>`;
-                            blockButton(i, true);
-                        } else {
-                            blockButton(i);
-                        }
-                    }
-                });
-        }
+        //     if (
+        //         /^https:\/\/playentry.org\/redirect\?external=https:\/\/ifh.cc\/(g\/|i-|v-).*$/g.test(
+        //             i.href
+        //         )
+        //     ) {
+        //         i.className = "NoFind";
+        //         i.href
+        //             .slice(57)
+        //             .split(".")
+        //             .forEach((j) => {
+        //                 if (j.length == "6") {
+        //                     if (i.innerHTML.indexOf("img") == -1) i.innerHTML = "";
+        //                     i.innerHTML += `<div><img style="outline: 1px solid red;" class="realImage" onerror="this.parentNode.innerHTML = '<video style=&quot;outline: 1px solid red;&quot; class=&quot;realImage&quot; controls><source src=&quot;https://ifh.cc/g/${j}&quot;></video>'" src="https://ifh.cc/g/${j}"></img></div>`;
+        //                     if (
+        //                         localStorage.getItem(
+        //                             `pastaUser_${i.parentNode.parentNode.firstChild.href.slice(
+        //                                 "30"
+        //                             )}`
+        //                         ) != null
+        //                     ) {
+        //                         i.href = `chrome-extension://${chrome.runtime.id}/blockImage.png`;
+        //                         i.innerHTML = `<div><img style="outline: 1px solid black;" class="realImage" src="chrome-extension://${chrome.runtime.id}/blockImage.png"></img></div>`;
+        //                         blockButton(i, true);
+        //                     } else {
+        //                         blockButton(i);
+        //                     }
+        //                 }
+        //             });
+        //     } ifh 지원 종료, 단 부활 가능성이 있기 떄문에 임시로 주성 사용
         if (
             /^http:\/\/playentry.org\/\/uploads\/.{2}\/.{2}\/.*\..*$/i.test(
                 i.href
             )
         ) {
             i.className = "NoFind";
-            i.innerHTML = `<div><img style="outline: 1px solid aqua;" class="realImage" onerror="this.parentNode.innerHTML = '<video style=&quot;outline: 1px solid aqua;&quot; class=&quot;realImage&quot; controls src=&quot;${i.href.replace(
+            i.innerHTML = `<div><a class="NoFind" href="${
+                i.href
+            }"><img style="outline: 1px solid aqua;" class="realImage" onerror="this.outerHTML = '<video style=&quot;outline: 1px solid aqua;&quot; class=&quot;realImage&quot; controls src=&quot;${i.href.replace(
                 "http://",
                 "https://"
             )}&quot; onloadeddata=&quot;this.load();this.onloadeddata=undefined;&quot;></video>'" src="${i.href.replace(
                 "http://",
                 "https://"
-            )}"> </img></div>`;
+            )}"> </img></a></div>`;
             if (
                 localStorage.getItem(
                     `pastaUser_${i.parentNode.parentNode.firstChild.href.slice(
@@ -160,11 +162,12 @@ function LinkToImage() {
                 ) != null
             ) {
                 i.href = `chrome-extension://${chrome.runtime.id}/blockImage.png`;
-                i.innerHTML = `<div><img style="outline: 1px solid black;" class="realImage" src="chrome-extension://${chrome.runtime.id}/blockImage.png"></img></div>`;
+                i.innerHTML = `<div><a href="${i.href}" class="NoFind"><img style="outline: 1px solid black;" class="realImage" src="chrome-extension://${chrome.runtime.id}/blockImage.png"></img></a></div>`;
                 blockButton(i, true);
             } else {
                 blockButton(i);
             }
+            i.removeAttribute("href");
         }
     });
 }
@@ -244,7 +247,12 @@ function loadEvent() {
     document
         .querySelector('input[type="text"]')
         .addEventListener("keydown", (e) => {
-            if (e.key == "Enter")
+            if (
+                e.key == "Enter" &&
+                /^https:\/\/(ncc.www)?\.?playentry.org\/community\/entrystory\/list\?.*$/g.test(
+                    location.href
+                )
+            )
                 location.replace(
                     `https://playentry.org/community/entrystory/list?query=${encodeURI(
                         document.querySelector('input[type = "text"]').value
