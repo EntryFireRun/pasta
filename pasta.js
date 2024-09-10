@@ -145,7 +145,7 @@ function LinkToImage() {
             )
         ) {
             i.className = "NoFind";
-            i.innerHTML = `<div><a class="NoFind" href="${
+            i.innerHTML = `<div><a target="_blank" class="NoFind" href="${
                 i.href
             }"><img style="outline: 1px solid aqua;" class="realImage" onerror="this.outerHTML = '<video style=&quot;outline: 1px solid aqua;&quot; class=&quot;realImage&quot; controls src=&quot;${i.href.replace(
                 "http://",
@@ -162,7 +162,7 @@ function LinkToImage() {
                 ) != null
             ) {
                 i.href = `chrome-extension://${chrome.runtime.id}/blockImage.png`;
-                i.innerHTML = `<div><a href="${i.href}" class="NoFind"><img style="outline: 1px solid black;" class="realImage" src="chrome-extension://${chrome.runtime.id}/blockImage.png"></img></a></div>`;
+                i.innerHTML = `<div><a target="_blank" href="${i.href}" class="NoFind"><img style="outline: 1px solid black;" class="realImage" src="chrome-extension://${chrome.runtime.id}/blockImage.png"></img></a></div>`;
                 blockButton(i, true);
             } else {
                 blockButton(i);
