@@ -6,7 +6,7 @@
     "icons": { "512": "1f35d.png" },
     "web_accessible_resources": [
         {
-            "resources": ["blockImage.png"],
+            "resources": ["blockImage.png", "done.png"],
             "matches": ["https://*.playentry.org/*"]
         }
     ],
