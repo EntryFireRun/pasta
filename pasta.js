@@ -114,7 +114,6 @@ function LinkToImage() {
             "a[href^='http://playentry.org//uploads/']:not(.NoFind)"
         )
         .forEach((i) => {
-            // ifh는 부활하면 나중에 다시 만들기
             if (
                 /^http:\/\/playentry.org\/\/uploads\/.{2}\/.{2}\/.*\..*$/i.test(
                     i.href
@@ -151,27 +150,27 @@ function LinkToImage() {
             'a[href^="/redirect?external=https://bloupla.net/img/?="]'
         )
         .forEach((i) => {
+            i.href
+                .split("?=")[1]
+                .split(",")
+                .forEach((j) => {
+                    if (i.innerHTML.indexOf("<img") == -1) i.innerHTML = "";
+                    i.innerHTML += `<div><a target="_blank" class="NoFind" href="${i.href}"><img onerror="this.src='chrome-extension://${chrome.runtime.id}/done.png'" style="outline: 1px solid red;" class="realImage" src="https://firebasestorage.googleapis.com/v0/b/imgshare-2.appspot.com/o/${j}?alt=media"></img></a><div>`;
+                    if (
+                        localStorage.getItem(
+                            `pastaUser_${i.parentNode.parentNode.firstChild.href.slice(
+                                "30"
+                            )}`
+                        ) != null
+                    ) {
+                        i.href = `chrome-extension://${chrome.runtime.id}/blockImage.png`;
+                        i.innerHTML = `<div><a target="_blank" href="${i.href}" class="NoFind"><img style="outline: 1px solid black;" class="realImage" src="chrome-extension://${chrome.runtime.id}/blockImage.png"></img></a></div>`;
+                        blockButton(i, true);
+                    } else {
+                        blockButton(i);
+                    }
+                });
             i.className = "NoFind";
-            i.innerHTML = `<div><a target="_blank" class="NoFind" href="${
-                i.href
-            }"><img onerror="this.src='chrome-extension://${
-                chrome.runtime.id
-            }/done.png'" style="outline: 1px solid red;" class="realImage" src="https://firebasestorage.googleapis.com/v0/b/imgshare-2.appspot.com/o/${
-                i.href.split("?=")[1]
-            }?alt=media"></img></a><div>`;
-            if (
-                localStorage.getItem(
-                    `pastaUser_${i.parentNode.parentNode.firstChild.href.slice(
-                        "30"
-                    )}`
-                ) != null
-            ) {
-                i.href = `chrome-extension://${chrome.runtime.id}/blockImage.png`;
-                i.innerHTML = `<div><a target="_blank" href="${i.href}" class="NoFind"><img style="outline: 1px solid black;" class="realImage" src="chrome-extension://${chrome.runtime.id}/blockImage.png"></img></a></div>`;
-                blockButton(i, true);
-            } else {
-                blockButton(i);
-            }
             i.removeAttribute("href");
         });
 }
@@ -248,21 +247,25 @@ function loadEvent() {
         childList: true,
         subtree: true,
     });
-    document
-        .querySelector('input[type="text"]')
-        .addEventListener("keydown", (e) => {
-            if (
-                e.key == "Enter" &&
-                /^https:\/\/(ncc.www)?\.?playentry.org\/community\/entrystory\/list\?.*$/g.test(
-                    location.href
+    try {
+        document
+            .querySelector('input[type="text"]')
+            .addEventListener("keydown", (e) => {
+                if (
+                    e.key == "Enter" &&
+                    /^https:\/\/(ncc.www)?\.?playentry.org\/community\/entrystory\/list\?.*$/g.test(
+                        location.href
+                    )
                 )
-            )
-                location.replace(
-                    `https://playentry.org/community/entrystory/list?query=${encodeURI(
-                        document.querySelector('input[type = "text"]').value
-                    )}`
-                );
-        });
+                    location.replace(
+                        `https://playentry.org/community/entrystory/list?query=${encodeURI(
+                            document.querySelector('input[type = "text"]').value
+                        )}`
+                    );
+            });
+    } catch {
+        // 모바일에서는 버그 남
+    }
     document.querySelectorAll('li > a[role="button"]').forEach((i) => {
         // 케이스 문 없이 만드는 쌈@뽕한 코딩
         if (i.innerText == "정확도순") {
