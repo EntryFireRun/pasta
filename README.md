@@ -29,7 +29,7 @@ Ctrl키를 누른 상태로 클립보드에 있는 사진을 업로드 해보세
 
 | 색                                | 위치        |
 | --------------------------------- | ----------- |
-| $\textcolor{red}{\textsf{빨강}}$  | ifh         |
+| $\textcolor{red}{\textsf{빨강}}$  | bloupla.net/img         |
 | $\textcolor{aqua}{\textsf{청록}}$ | 엔트리 서버 |
 | 검정                              | 차단됨      |
 
