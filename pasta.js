@@ -1,5 +1,4 @@
 let pressCtrl = false;
-let isLoading = false;
 
 document.addEventListener("keydown", (e) => {
     if (!pressCtrl) {
