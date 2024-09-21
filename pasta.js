@@ -9,7 +9,11 @@ document.addEventListener("keyup", () => {
     pressCtrl = false;
 });
 
-function uploadImage(textPos) {
+/**
+ * 엔트리에 이미지를 업로드 하는 함수
+ * @param {*} textarea 엔이 글 입력 textarea
+ */
+function uploadImage(textarea) {
     console.log(pressCtrl);
     if (!pressCtrl) {
         const i = document.createElement("input");
@@ -25,15 +29,15 @@ function uploadImage(textPos) {
             })
                 .then((r) => r.json())
                 .then((d) => {
-                    textPos.value += `${
-                        !!textPos.value ? " " : ""
+                    textarea.value += `${
+                        !!textarea.value ? " " : ""
                     }playentry.org//uploads/${d.filename.slice(
                         0,
                         2
                     )}/${d.filename.slice(2, 4)}/${d.filename}.${
                         d.metaData.format
                     }`;
-                    textPos.style.height = textPos.scrollHeight + "px";
+                    textarea.style.height = textarea.scrollHeight + "px";
                 });
         });
     } else {
@@ -52,15 +56,15 @@ function uploadImage(textPos) {
                 })
                     .then((r) => r.json())
                     .then((d) => {
-                        textPos.value += `${
-                            !!textPos.value ? " " : ""
+                        textarea.value += `${
+                            !!textarea.value ? " " : ""
                         }playentry.org//uploads/${d.filename.slice(
                             0,
                             2
                         )}/${d.filename.slice(2, 4)}/${d.filename}.${
                             d.metaData.format
                         }`;
-                        textPos.style.height = textPos.scrollHeight + "px";
+                        textarea.style.height = textarea.scrollHeight + "px";
                     });
             }
         }
@@ -68,7 +72,12 @@ function uploadImage(textPos) {
     }
 }
 
-function blockButton(target, isblock = false) {
+/**
+ * 글에 차단하기/차단해재 추가하는 함수
+ * @param {*} target 글 본문이 들어가 있는 html 요소
+ * @param {*} isblock 현재 차단 여부, 버튼의 내용을 "차단하기"로 할지 "차단해제"로 할지 결정
+ */
+function appendBlockButton(target, isblock = false) {
     if (
         target.parentNode.parentNode.lastChild.lastChild.lastChild.firstChild
             .lastChild.innerText != "차단하기"
@@ -107,6 +116,9 @@ function blockButton(target, isblock = false) {
     }
 }
 
+/**
+ * 엔이에 올라온 이미지 링크를 이미지로 변경하는 함수
+ */
 function LinkToImage() {
     document
         .querySelectorAll(
@@ -137,9 +149,9 @@ function LinkToImage() {
                 ) {
                     i.href = `chrome-extension://${chrome.runtime.id}/blockImage.png`;
                     i.innerHTML = `<div><a target="_blank" href="${i.href}" class="NoFind"><img style="outline: 1px solid black;" class="realImage" src="chrome-extension://${chrome.runtime.id}/blockImage.png"></img></a></div>`;
-                    blockButton(i, true);
+                    appendBlockButton(i, true);
                 } else {
-                    blockButton(i);
+                    appendBlockButton(i);
                 }
                 i.removeAttribute("href");
             }
@@ -164,9 +176,9 @@ function LinkToImage() {
                     ) {
                         i.href = `chrome-extension://${chrome.runtime.id}/blockImage.png`;
                         i.innerHTML = `<div><a target="_blank" href="${i.href}" class="NoFind"><img style="outline: 1px solid black;" class="realImage" src="chrome-extension://${chrome.runtime.id}/blockImage.png"></img></a></div>`;
-                        blockButton(i, true);
+                        appendBlockButton(i, true);
                     } else {
-                        blockButton(i);
+                        appendBlockButton(i);
                     }
                 });
             i.className = "NoFind";
@@ -174,7 +186,10 @@ function LinkToImage() {
         });
 }
 
-function CreateUploadBuutton() {
+/**
+ * 이미지 업로드 버튼을 추가하는 함수
+ */
+function CreateUploadButton() {
     ImageUploadsButton = document
         .querySelector(
             'html>body>div[id="__next"]>div>div[class^="nextInner"]>div>section>div>div>div>div>div>div>div>a'
@@ -191,6 +206,9 @@ function CreateUploadBuutton() {
         .prepend(ImageUploadsButton);
 }
 
+/**
+ * 페이지 로딩 대기 후 loadEvent를 호출하는 함수
+ */
 function isLoad(cp = 0) {
     if (cp != 20) {
         if (document.querySelector("button") === null) {
@@ -205,9 +223,12 @@ function isLoad(cp = 0) {
     }
 }
 
+/**
+ * 각종 이벤트를 추가하는 함수
+ */
 function loadEvent() {
     try {
-        CreateUploadBuutton();
+        CreateUploadButton();
     } catch {
         console.log("업로드 버튼을 만들 수 없는 환경.");
     }
