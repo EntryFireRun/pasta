@@ -1,5 +1,7 @@
 # 업로드 안되면 컨트롤 키 한 번 다시 누르고 때주세요 업로드 안되면 컨트롤 키 한 번 다시 누르고 때주세요 업로드 안되면 컨트롤 키 한 번 다시 누르고 때주세요 업로드 안되면 컨트롤 키 한 번 다시 누르고 때주세요 업로드 안되면 컨트롤 키 한 번 다시 누르고 때주세요 업로드 안되면 컨트롤 키 한 번 다시 누르고 때주세요
 
+코드 설명에 대해서는 `GUIDE.md`를 참고해 주세요.
+
 # 로고 : [트위터 이모지](https://github.com/twitter/twemoji/blob/master/assets/svg/1f35d.svg)
 
 <img src="https://playentry.org/uploads/49/56/4956ad72m0j7c3th1laobc3284931yr5.png" width="500px">
