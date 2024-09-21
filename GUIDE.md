@@ -5,6 +5,14 @@
 # 목차
 
 - [전역 변수](#전역-변수)
+  - [uploadImage](#uploadImage)
+  - [blockButton](#blockButton)
+  - [LinkToImage](#LinkToImage)
+  - [CreateUploadBuutton](#CreateUploadBuutton)
+  - [isLoad](#isLoad)
+  - [loadEvnet](#loadEvnet)
+  - [orderV](#orderV)
+  - [waitLoad](#waitLoad)
 - [함수](#함수)
 - [호출 순서](#호출-순서)
 
