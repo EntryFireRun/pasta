@@ -27,7 +27,7 @@
 
 ## blockButton
 
-차단 버튼을 추가하는 함수입니다. [LinkToImage](##LinkToImage)에서 호출됩니다.
+차단 버튼을 추가하는 함수입니다. [LinkToImage](#LinkToImage)에서 호출됩니다.
 
 ### 매개변수
 
@@ -45,15 +45,15 @@
 
 ## isLoad
 
-페이지 로딩 대기 후 [loadEvent](##loadEvnet)를 호출하는 함수입니다.
+페이지 로딩 대기 후 [loadEvent](#loadEvnet)를 호출하는 함수입니다.
 
 ## loadEvnet
 
-[CreateUploadBuutton](##CreateUploadBuutton)와 [LinkToImage](##LinkToImage) 호출 후 여러 이벤트를 추가하는 함수입니다.
+[CreateUploadBuutton](#CreateUploadBuutton)와 [LinkToImage](#LinkToImage) 호출 후 여러 이벤트를 추가하는 함수입니다.
 
 ## orderV
 
-현재 url이 매개변수로 넘어온 `link`와 같다면 [isLoad](##isLoad)를 호출하는 함수입니다.
+현재 url이 매개변수로 넘어온 `link`와 같다면 [isLoad](#isLoad)를 호출하는 함수입니다.
 1.5초 동안 실행되며 0.1초마다 현재 url이 매개변수로 넘어온 `link`와 같은지 검사합니다.
 
 ### 매개변수
@@ -64,7 +64,7 @@
 
 ## waitLoad
 
-페이지 이동이 발생되었고 현재 url이 엔이 url일 시 [isLoad](##isLoad)를 호출하는 함수입니다.
+페이지 이동이 발생되었고 현재 url이 엔이 url일 시 [isLoad](#isLoad)를 호출하는 함수입니다.
 1.5초 동안 실행되며 0.1초마다 현재 url이 엔이 url인지 검사합니다.
 
 ### 매개변수
