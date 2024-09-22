@@ -73,7 +73,7 @@ function uploadImage(textarea) {
 }
 
 /**
- * 글에 차단하기/차단해재 추가하는 함수
+ * 글에 차단하기/차단해제 추가하는 함수
  * @param {*} target 글 본문이 들어가 있는 html 요소
  * @param {*} isblock 현재 차단 여부, 버튼의 내용을 "차단하기"로 할지 "차단해제"로 할지 결정
  */
