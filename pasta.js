@@ -9,15 +9,19 @@ document.addEventListener("keyup", () => {
     pressCtrl = false;
 });
 
-function uploadImage(textPos) {
+/**
+ * 엔트리에 이미지를 업로드 하는 함수
+ * @param {*} textarea 엔이 글 입력 textarea
+ */
+function uploadImage(textarea) {
     console.log(pressCtrl);
     if (!pressCtrl) {
-        const i = document.createElement("input");
-        i.type = "file";
-        i.click();
-        i.addEventListener("change", () => {
+        const imgInput = document.createElement("input");
+        imgInput.type = "file";
+        imgInput.click();
+        imgInput.addEventListener("change", () => {
             const form = new FormData();
-            form.append("file", i.files[0]);
+            form.append("file", imgInput.files[0]);
             form.append("type", "notcompress");
             fetch("https://playentry.org/rest/picture", {
                 method: "POST",
@@ -25,15 +29,15 @@ function uploadImage(textPos) {
             })
                 .then((r) => r.json())
                 .then((d) => {
-                    textPos.value += `${
-                        !!textPos.value ? " " : ""
+                    textarea.value += `${
+                        !!textarea.value ? " " : ""
                     }playentry.org//uploads/${d.filename.slice(
                         0,
                         2
                     )}/${d.filename.slice(2, 4)}/${d.filename}.${
                         d.metaData.format
                     }`;
-                    textPos.style.height = textPos.scrollHeight + "px";
+                    textarea.style.height = textarea.scrollHeight + "px";
                 });
         });
     } else {
@@ -51,16 +55,16 @@ function uploadImage(textPos) {
                     body: form,
                 })
                     .then((r) => r.json())
-                    .then((d) => {
-                        textPos.value += `${
-                            !!textPos.value ? " " : ""
-                        }playentry.org//uploads/${d.filename.slice(
+                    .then((data) => {
+                        textarea.value += `${
+                            !!textarea.value ? " " : ""
+                        }playentry.org//uploads/${data.filename.slice(
                             0,
                             2
-                        )}/${d.filename.slice(2, 4)}/${d.filename}.${
-                            d.metaData.format
+                        )}/${data.filename.slice(2, 4)}/${data.filename}.${
+                            data.metaData.format
                         }`;
-                        textPos.style.height = textPos.scrollHeight + "px";
+                        textarea.style.height = textarea.scrollHeight + "px";
                     });
             }
         }
@@ -68,7 +72,12 @@ function uploadImage(textPos) {
     }
 }
 
-function blockButton(target, isblock = false) {
+/**
+ * 글에 차단하기/차단해재 추가하는 함수
+ * @param {*} target 글 본문이 들어가 있는 html 요소
+ * @param {*} isblock 현재 차단 여부, 버튼의 내용을 "차단하기"로 할지 "차단해제"로 할지 결정
+ */
+function appendBlockButton(target, isblock = false) {
     if (
         target.parentNode.parentNode.lastChild.lastChild.lastChild.firstChild
             .lastChild.innerText != "차단하기"
@@ -107,74 +116,80 @@ function blockButton(target, isblock = false) {
     }
 }
 
+/**
+ * 엔이에 올라온 이미지 링크를 이미지로 변경하는 함수
+ */
 function LinkToImage() {
     document
         .querySelectorAll(
             "a[href^='http://playentry.org//uploads/']:not(.NoFind)"
         )
-        .forEach((i) => {
+        .forEach((imgElement) => {
             if (
                 /^http:\/\/playentry.org\/\/uploads\/.{2}\/.{2}\/.*\..*$/i.test(
-                    i.href
+                    imgElement.href
                 )
             ) {
-                i.className = "NoFind";
-                i.innerHTML = `<div><a target="_blank" class="NoFind" href="${
-                    i.href
-                }"><img style="outline: 1px solid aqua;" class="realImage" onerror="this.outerHTML = '<video style=&quot;outline: 1px solid aqua;&quot; class=&quot;realImage&quot; controls src=&quot;${i.href.replace(
+                imgElement.className = "NoFind";
+                imgElement.innerHTML = `<div><a target="_blank" class="NoFind" href="${
+                    imgElement.href
+                }"><img style="outline: 1px solid aqua;" class="realImage" onerror="this.outerHTML = '<video style=&quot;outline: 1px solid aqua;&quot; class=&quot;realImage&quot; controls src=&quot;${imgElement.href.replace(
                     "http://",
                     "https://"
-                )}&quot; onloadeddata=&quot;this.load();this.onloadeddata=undefined;&quot;></video>'" src="${i.href.replace(
+                )}&quot; onloadeddata=&quot;this.load();this.onloadeddata=undefined;&quot;></video>'" src="${imgElement.href.replace(
                     "http://",
                     "https://"
                 )}"> </img></a></div>`;
                 if (
                     localStorage.getItem(
-                        `pastaUser_${i.parentNode.parentNode.firstChild.href.slice(
+                        `pastaUser_${imgElement.parentNode.parentNode.firstChild.href.slice(
                             "30"
                         )}`
                     ) != null
                 ) {
-                    i.href = `chrome-extension://${chrome.runtime.id}/blockImage.png`;
-                    i.innerHTML = `<div><a target="_blank" href="${i.href}" class="NoFind"><img style="outline: 1px solid black;" class="realImage" src="chrome-extension://${chrome.runtime.id}/blockImage.png"></img></a></div>`;
-                    blockButton(i, true);
+                    imgElement.href = `chrome-extension://${chrome.runtime.id}/blockImage.png`;
+                    imgElement.innerHTML = `<div><a target="_blank" href="${imgElement.href}" class="NoFind"><img style="outline: 1px solid black;" class="realImage" src="chrome-extension://${chrome.runtime.id}/blockImage.png"></img></a></div>`;
+                    appendBlockButton(imgElement, true);
                 } else {
-                    blockButton(i);
+                    appendBlockButton(imgElement);
                 }
-                i.removeAttribute("href");
+                imgElement.removeAttribute("href");
             }
         });
     document
         .querySelectorAll(
             'a[href^="/redirect?external=https://bloupla.net/img/?="]'
         )
-        .forEach((i) => {
-            i.href
+        .forEach((imgElement) => {
+            imgElement.href
                 .split("?=")[1]
                 .split(",")
                 .forEach((j) => {
-                    if (i.innerHTML.indexOf("<img") == -1) i.innerHTML = "";
-                    i.innerHTML += `<div><a target="_blank" class="NoFind" href="${i.href}"><img onerror="this.src='chrome-extension://${chrome.runtime.id}/done.png'" style="outline: 1px solid red;" class="realImage" src="https://firebasestorage.googleapis.com/v0/b/imgshare-2.appspot.com/o/${j}?alt=media"></img></a><div>`;
+                    if (imgElement.innerHTML.indexOf("<img") == -1) imgElement.innerHTML = "";
+                    imgElement.innerHTML += `<div><a target="_blank" class="NoFind" href="${imgElement.href}"><img onerror="this.src='chrome-extension://${chrome.runtime.id}/done.png'" style="outline: 1px solid red;" class="realImage" src="https://firebasestorage.googleapis.com/v0/b/imgshare-2.appspot.com/o/${j}?alt=media"></img></a><div>`;
                     if (
                         localStorage.getItem(
-                            `pastaUser_${i.parentNode.parentNode.firstChild.href.slice(
+                            `pastaUser_${imgElement.parentNode.parentNode.firstChild.href.slice(
                                 "30"
                             )}`
                         ) != null
                     ) {
-                        i.href = `chrome-extension://${chrome.runtime.id}/blockImage.png`;
-                        i.innerHTML = `<div><a target="_blank" href="${i.href}" class="NoFind"><img style="outline: 1px solid black;" class="realImage" src="chrome-extension://${chrome.runtime.id}/blockImage.png"></img></a></div>`;
-                        blockButton(i, true);
+                        imgElement.href = `chrome-extension://${chrome.runtime.id}/blockImage.png`;
+                        imgElement.innerHTML = `<div><a target="_blank" href="${imgElement.href}" class="NoFind"><img style="outline: 1px solid black;" class="realImage" src="chrome-extension://${chrome.runtime.id}/blockImage.png"></img></a></div>`;
+                        appendBlockButton(imgElement, true);
                     } else {
-                        blockButton(i);
+                        appendBlockButton(imgElement);
                     }
                 });
-            i.className = "NoFind";
-            i.removeAttribute("href");
+            imgElement.className = "NoFind";
+            imgElement.removeAttribute("href");
         });
 }
 
-function CreateUploadBuutton() {
+/**
+ * 이미지 업로드 버튼을 추가하는 함수
+ */
+function CreateUploadButton() {
     ImageUploadsButton = document
         .querySelector(
             'html>body>div[id="__next"]>div>div[class^="nextInner"]>div>section>div>div>div>div>div>div>div>a'
@@ -191,6 +206,9 @@ function CreateUploadBuutton() {
         .prepend(ImageUploadsButton);
 }
 
+/**
+ * 페이지 로딩 대기 후 loadEvent를 호출하는 함수
+ */
 function isLoad(cp = 0) {
     if (cp != 20) {
         if (document.querySelector("button") === null) {
@@ -205,9 +223,12 @@ function isLoad(cp = 0) {
     }
 }
 
+/**
+ * 각종 이벤트를 추가하는 함수
+ */
 function loadEvent() {
     try {
-        CreateUploadBuutton();
+        CreateUploadButton();
     } catch {
         console.log("업로드 버튼을 만들 수 없는 환경.");
     }
@@ -265,10 +286,10 @@ function loadEvent() {
     } catch {
         // 모바일에서는 버그 남
     }
-    document.querySelectorAll('li > a[role="button"]').forEach((i) => {
+    document.querySelectorAll('li > a[role="button"]').forEach((buttonElement) => {
         // 케이스 문 없이 만드는 쌈@뽕한 코딩
-        if (i.innerText == "정확도순") {
-            i.addEventListener("click", () =>
+        if (buttonElement.innerText == "정확도순") {
+            buttonElement.addEventListener("click", () =>
                 orderV(
                     0,
                     `https://playentry.org/community/entrystory/list${
@@ -285,8 +306,8 @@ function loadEvent() {
                 )
             );
         }
-        if (i.innerText == "최신순") {
-            i.addEventListener("click", () =>
+        if (buttonElement.innerText == "최신순") {
+            buttonElement.addEventListener("click", () =>
                 orderV(
                     0,
                     `https://playentry.org/community/entrystory/list${
@@ -304,8 +325,8 @@ function loadEvent() {
             );
         }
         // if (i.innerText == '조회순) `${location.search.split('sort')[0]}sort${location.search.split('sort')[1].split('=')[0]}=${'visit'}${location.search.split('sort')[1].split('&')[1] == undefined ? "" : '&' + location.search.split('sort')[1].split('&')[1]}`
-        if (i.innerText == "댓글순") {
-            i.addEventListener("click", () =>
+        if (buttonElement.innerText == "댓글순") {
+            buttonElement.addEventListener("click", () =>
                 orderV(
                     0,
                     `https://playentry.org/community/entrystory/list${
@@ -322,8 +343,8 @@ function loadEvent() {
                 )
             );
         }
-        if (i.innerText == "좋아요순") {
-            i.addEventListener("click", () =>
+        if (buttonElement.innerText == "좋아요순") {
+            buttonElement.addEventListener("click", () =>
                 orderV(
                     0,
                     `https://playentry.org/community/entrystory/list${
@@ -340,8 +361,8 @@ function loadEvent() {
                 )
             );
         }
-        if (i.innerText == "오늘") {
-            i.addEventListener("click", () =>
+        if (buttonElement.innerText == "오늘") {
+            buttonElement.addEventListener("click", () =>
                 location.replace(
                     `https://playentry.org/community/entrystory/list${
                         location.search.split("term")[0]
@@ -353,8 +374,8 @@ function loadEvent() {
                 )
             );
         }
-        if (i.innerText == "최근 1주일") {
-            i.addEventListener("click", () =>
+        if (buttonElement.innerText == "최근 1주일") {
+            buttonElement.addEventListener("click", () =>
                 location.replace(
                     `https://playentry.org/community/entrystory/list${
                         location.search.split("term")[0]
@@ -366,8 +387,8 @@ function loadEvent() {
                 )
             );
         }
-        if (i.innerText == "최근 1개월") {
-            i.addEventListener("click", () =>
+        if (buttonElement.innerText == "최근 1개월") {
+            buttonElement.addEventListener("click", () =>
                 location.replace(
                     `https://playentry.org/community/entrystory/list${
                         location.search.split("term")[0]
@@ -379,8 +400,8 @@ function loadEvent() {
                 )
             );
         }
-        if (i.innerText == "최근 3개월") {
-            i.addEventListener("click", () =>
+        if (buttonElement.innerText == "최근 3개월") {
+            buttonElement.addEventListener("click", () =>
                 location.replace(
                     `https://playentry.org/community/entrystory/list${
                         location.search.split("term")[0]

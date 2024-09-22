@@ -7,9 +7,9 @@
 - [전역 변수](#전역-변수)
 - [함수](#함수)
   - [uploadImage](#uploadImage)
-  - [blockButton](#blockButton)
+  - [appendBlockButton](#appendblockbutton)
   - [LinkToImage](#LinkToImage)
-  - [CreateUploadBuutton](#CreateUploadBuutton)
+  - [CreateUploadButton](#createuploadbutton)
   - [isLoad](#isLoad)
   - [loadEvnet](#loadEvnet)
   - [orderV](#orderV)
@@ -30,7 +30,7 @@
 
 `textPos` - 엔이 글 입력에 사용되는 textarea가 저장되는 변수입니다.
 
-## blockButton
+## appendBlockButton
 
 차단 버튼을 추가하는 함수입니다. [LinkToImage](#LinkToImage)에서 호출됩니다.
 
@@ -44,7 +44,7 @@
 
 엔이에 올라온 이미지 링크를 이미지로 변경하는 함수입니다.
 
-## CreateUploadBuutton
+## CreateUploadButton
 
 이미지 업로드 버튼을 추가하는 함수입니다.
 
@@ -54,7 +54,7 @@
 
 ## loadEvnet
 
-[CreateUploadBuutton](#CreateUploadBuutton)와 [LinkToImage](#LinkToImage) 호출 후 여러 이벤트를 추가하는 함수입니다.
+[CreateUploadButton](#createuploadbutton)와 [LinkToImage](#LinkToImage) 호출 후 여러 이벤트를 추가하는 함수입니다.
 
 ## orderV
 
