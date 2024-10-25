@@ -1,19 +1,26 @@
 # GUIDE
 
 코드에 대한 전반적인 설명이 적힌 문서입니다.
+0.0.7 버전을 기준으로 하며, 현재 최신 버전은 0.0.8입니다
 
 # 목차
 
-- [전역 변수](#전역-변수)
-- [함수](#함수)
-  - [uploadImage](#uploadImage)
-  - [appendBlockButton](#appendblockbutton)
-  - [LinkToImage](#LinkToImage)
-  - [CreateUploadButton](#createuploadbutton)
-  - [isLoad](#isLoad)
-  - [loadEvnet](#loadEvnet)
-  - [orderV](#orderV)
-  - [waitLoad](#waitLoad)
+-   [GUIDE](#guide)
+-   [목차](#목차)
+-   [전역 변수](#전역-변수)
+-   [함수](#함수)
+    -   [uploadImage](#uploadimage)
+        -   [매개변수](#매개변수)
+    -   [appendBlockButton](#appendblockbutton)
+        -   [매개변수](#매개변수-1)
+    -   [LinkToImage](#linktoimage)
+    -   [CreateUploadButton](#createuploadbutton)
+    -   [isLoad](#isload)
+    -   [loadEvnet](#loadevnet)
+    -   [orderV](#orderv)
+        -   [매개변수](#매개변수-2)
+    -   [waitLoad](#waitload)
+        -   [매개변수](#매개변수-3)
 
 # 전역 변수
 
