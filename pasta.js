@@ -134,16 +134,16 @@ function LinkToImage() {
                 imgElement.innerHTML = `<div><a target="_blank" class="NoFind" href="${imgElement.href}"><img style="outline: 1px solid aqua;" src="${imgElement.href}" class="realImage" onerror="createLinkButtonEntry(this, '${imgElement.href}')"></div>`;
                 if (
                     localStorage.getItem(
-                        `pastaUser_${i.parentNode.parentNode.firstChild.href.slice(
+                        `pastaUser_${imgElement.parentNode.parentNode.firstChild.href.slice(
                             "30"
                         )}`
                     ) != null
                 ) {
-                    i.href = `chrome-extension://${chrome.runtime.id}/blockImage.png`;
-                    i.innerHTML = `<div><a target="_blank" href="${imgElement.href}" class="NoFind"><img style="outline: 1px solid black;" class="realImage" src="chrome-extension://${chrome.runtime.id}/blockImage.png"></img></a></div>`;
-                    blockButton(imgElement, true);
+                    imgElement.href = `chrome-extension://${chrome.runtime.id}/blockImage.png`;
+                    imgElement.innerHTML = `<div><a target="_blank" href="${imgElement.href}" class="NoFind"><img style="outline: 1px solid black;" class="realImage" src="chrome-extension://${chrome.runtime.id}/blockImage.png"></img></a></div>`;
+                    appendBlockButton(imgElement, true);
                 } else {
-                    blockButton(imgElement);
+                    appendBlockButton(imgElement);
                 }
                 imgElement.removeAttribute("href");
             }
@@ -168,10 +168,10 @@ function LinkToImage() {
                         ) != null
                     ) {
                         imgElement.href = `chrome-extension://${chrome.runtime.id}/blockImage.png`;
-                        imgElement.innerHTML = `<div><a target="_blank" href="${i.href}" class="NoFind"><img style="outline: 1px solid black;" class="realImage" src="chrome-extension://${chrome.runtime.id}/blockImage.png"></img></a></div>`;
-                        blockButton(i, true);
+                        imgElement.innerHTML = `<div><a target="_blank" href="${imgElement.href}" class="NoFind"><img style="outline: 1px solid black;" class="realImage" src="chrome-extension://${chrome.runtime.id}/blockImage.png"></img></a></div>`;
+                        appendBlockButton(imgElement, true);
                     } else {
-                        blockButton(i);
+                        appendBlockButton(imgElement);
                     }
                 });
             imgElement.className = "NoFind";
