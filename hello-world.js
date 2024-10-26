@@ -5,7 +5,7 @@ function createLinkButton(realThis, realJ) {
     linkButton.innerText = "바로가기";
     linkButton.href = `https://firebasestorage.googleapis.com/v0/b/imgshare-2.appspot.com/o/${realJ}?alt=media`;
     realThis.before(linkButton);
-    realThis.outerHTML = `<video controls style='outline: 1px solid red;' class='realImage' src='https://firebasestorage.googleapis.com/v0/b/imgshare-2.appspot.com/o/${realJ}?alt=media'></video>`;
+    realThis.outerHTML = `<video controls style='outline: 1px solid red;' class='realImage' src='https://bloupla.net/img/?=${realJ}'></video>`;
 }
 
 function createLinkButtonEntry(realThis, realJ) {
