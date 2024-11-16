@@ -88,3 +88,76 @@
     background-color: #000000aa;
     color: #ffffff !important;
 }
+
+#blackBackground {
+    background-color: rgba(0, 0, 0, 0.7);
+    width: 100%;
+    height: 100%;
+    position: fixed;
+    top: 0;
+    z-index: 10;
+}
+@media screen and (max-width: 790px) {
+    #errorBackground {
+        width: 70vw !important;
+    }
+}
+#errorBackground {
+    padding: 0 24px;
+    background-color: #fff;
+    width: 40vw;
+    height: 25vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    position: fixed;
+    z-index: 11;
+    border-radius: 24px;
+    border: 1px solid #eee;
+    box-shadow: 0 1px 0 rgba(0, 0, 0, 0.7);
+    top: 50%;
+    left: 50%;
+    font-size: 16px;
+    text-align: center;
+    transform: translateX(-50%) translateY(-50%);
+    & > img {
+        position: absolute;
+        transition: transform 0.3s;
+        right: 24px;
+        top: 24px;
+        cursor: pointer;
+        &:hover {
+            transform: rotate(360deg);
+        }
+    }
+    & > button {
+        display: block;
+        width: 40%;
+        height: 20%;
+        margin-top: 8%;
+        border: none;
+        background-color: rgb(22, 216, 163);
+        color: #fff;
+        transition: background-color 0.2s;
+        font-size: 16px;
+        border-radius: 24px;
+        cursor: pointer;
+        &:hover {
+            background-color: rgb(8, 196, 144);
+        }
+    }
+}
+
+section > div > div > div > h4 {
+    transform: translateY(100%) translateX(5px);
+    & > a {
+        color: rgb(10, 133, 255);
+    }
+}
+@media (max-width: 767px) {
+    section > div > div > div > h4 {
+        position: absolute;
+        transform: translateY(-100%) translateX(130px) !important;
+    }
+}

@@ -27,17 +27,25 @@ function uploadImage(textarea) {
                 method: "POST",
                 body: form,
             })
-                .then((r) => r.json())
-                .then((d) => {
-                    textarea.value += `${
-                        !!textarea.value ? " " : ""
-                    }playentry.org//uploads/${d.filename.slice(
-                        0,
-                        2
-                    )}/${d.filename.slice(2, 4)}/${d.filename}.${
-                        d.metaData.format
-                    }`;
-                    textarea.style.height = textarea.scrollHeight + "px";
+                .then((r) =>
+                    r.status == 201
+                        ? r.json()
+                        : showError(imgInput.files[0].size / 1000000)
+                )
+                .then((data) => {
+                    try {
+                        textarea.value += `${
+                            !!textarea.value ? " " : ""
+                        }playentry.org//uploads/${data.filename.slice(
+                            0,
+                            2
+                        )}/${data.filename.slice(2, 4)}/${data.filename}.${
+                            data.metaData.format
+                        }`;
+                        textarea.style.height = textarea.scrollHeight + "px";
+                    } catch (e) {
+                        console.log("data 형식에 오류가 발생했습니다");
+                    }
                 });
         });
     } else {
@@ -54,17 +62,26 @@ function uploadImage(textarea) {
                     method: "POST",
                     body: form,
                 })
-                    .then((r) => r.json())
+                    .then((r) =>
+                        r.status == 201
+                            ? r.json()
+                            : showError(blob.size / 1000000)
+                    )
                     .then((data) => {
-                        textarea.value += `${
-                            !!textarea.value ? " " : ""
-                        }playentry.org//uploads/${data.filename.slice(
-                            0,
-                            2
-                        )}/${data.filename.slice(2, 4)}/${data.filename}.${
-                            data.metaData.format
-                        }`;
-                        textarea.style.height = textarea.scrollHeight + "px";
+                        try {
+                            textarea.value += `${
+                                !!textarea.value ? " " : ""
+                            }playentry.org//uploads/${data.filename.slice(
+                                0,
+                                2
+                            )}/${data.filename.slice(2, 4)}/${data.filename}.${
+                                data.metaData.format
+                            }`;
+                            textarea.style.height =
+                                textarea.scrollHeight + "px";
+                        } catch (e) {
+                            console.log("data 형식에 오류가 발생했습니다");
+                        }
                     });
             }
         }
@@ -126,7 +143,7 @@ function LinkToImage() {
         )
         .forEach((imgElement) => {
             if (
-                /^http:\/\/playentry.org\/\/uploads\/.{2}\/.{2}\/.*\..*$/i.test(
+                /^http:\/\/playentry\.org\/\/uploads\/.{2}\/.{2}\/.*\.[a-zA-Z]*$/i.test(
                     imgElement.href
                 )
             ) {
@@ -226,6 +243,13 @@ function loadEvent() {
         console.log("업로드 버튼을 만들 수 없는 환경.");
     }
     LinkToImage();
+    const pastaWaterMark = document.createElement("h4");
+    pastaWaterMark.innerText = "With ";
+    const pastaLink = document.createElement("a");
+    pastaLink.innerText = "pasta";
+    pastaLink.href = "https://github.com/EntryFireRun/pasta/releases/";
+    pastaWaterMark.appendChild(pastaLink);
+    document.querySelector("section > div > div > div").append(pastaWaterMark);
     let SeeWebPG = new MutationObserver(() => {
         if (
             /^https?:\/\/.*\playentry\.org\/community\/entrystory\/list\?.*$/.test(
@@ -285,133 +309,43 @@ function loadEvent() {
             // 케이스 문 없이 만드는 쌈@뽕한 코딩
             if (buttonElement.innerText == "정확도순") {
                 buttonElement.addEventListener("click", () =>
-                    orderV(
-                        0,
-                        `https://playentry.org/community/entrystory/list${
-                            location.search.split("sort")[0]
-                        }sort${
-                            location.search.split("sort")[1].split("=")[0]
-                        }=${"score"}${
-                            location.search.split("sort")[1].split("&")[1] ==
-                            undefined
-                                ? ""
-                                : "&" +
-                                  location.search.split("sort")[1].split("&")[1]
-                        }`
-                    )
+                    orderV(0, "score")
                 );
             }
             if (buttonElement.innerText == "최신순") {
                 buttonElement.addEventListener("click", () =>
-                    orderV(
-                        0,
-                        `https://playentry.org/community/entrystory/list${
-                            location.search.split("sort")[0]
-                        }sort${
-                            location.search.split("sort")[1].split("=")[0]
-                        }=${"created"}${
-                            location.search.split("sort")[1].split("&")[1] ==
-                            undefined
-                                ? ""
-                                : "&" +
-                                  location.search.split("sort")[1].split("&")[1]
-                        }`
-                    )
+                    orderV(0, "created")
                 );
             }
             // if (i.innerText == '조회순) `${location.search.split('sort')[0]}sort${location.search.split('sort')[1].split('=')[0]}=${'visit'}${location.search.split('sort')[1].split('&')[1] == undefined ? "" : '&' + location.search.split('sort')[1].split('&')[1]}`
             if (buttonElement.innerText == "댓글순") {
                 buttonElement.addEventListener("click", () =>
-                    orderV(
-                        0,
-                        `https://playentry.org/community/entrystory/list${
-                            location.search.split("sort")[0]
-                        }sort${
-                            location.search.split("sort")[1].split("=")[0]
-                        }=${"commentsLength"}${
-                            location.search.split("sort")[1].split("&")[1] ==
-                            undefined
-                                ? ""
-                                : "&" +
-                                  location.search.split("sort")[1].split("&")[1]
-                        }`
-                    )
+                    orderV(0, "commentsLength")
                 );
             }
             if (buttonElement.innerText == "좋아요순") {
                 buttonElement.addEventListener("click", () =>
-                    orderV(
-                        0,
-                        `https://playentry.org/community/entrystory/list${
-                            location.search.split("sort")[0]
-                        }sort${
-                            location.search.split("sort")[1].split("=")[0]
-                        }=${"likesLength"}${
-                            location.search.split("sort")[1].split("&")[1] ==
-                            undefined
-                                ? ""
-                                : "&" +
-                                  location.search.split("sort")[1].split("&")[1]
-                        }`
-                    )
+                    orderV(0, "likesLength")
                 );
             }
             if (buttonElement.innerText == "오늘") {
                 buttonElement.addEventListener("click", () =>
-                    location.replace(
-                        `https://playentry.org/community/entrystory/list${
-                            location.search.split("term")[0]
-                        }term${
-                            location.search.split("term")[1].split("=")[0]
-                        }=${"today"}&${
-                            location.search.split("term")[1].split("&")[1]
-                        }`
-                    )
+                    changeTerm("today")
                 );
             }
             if (buttonElement.innerText == "최근 1주일") {
                 buttonElement.addEventListener("click", () =>
-                    location.replace(
-                        `https://playentry.org/community/entrystory/list${
-                            location.search.split("term")[0]
-                        }term${
-                            location.search.split("term")[1].split("=")[0]
-                        }=${"week"}&${
-                            location.search.split("term")[1].split("&")[1]
-                        }`
-                    )
+                    changeTerm("week")
                 );
             }
             if (buttonElement.innerText == "최근 1개월") {
                 buttonElement.addEventListener("click", () =>
-                    location.replace(
-                        `https://playentry.org/community/entrystory/list${
-                            location.search.split("term")[0]
-                        }term${
-                            location.search.split("term")[1].split("=")[0]
-                        }=${"month"}&${
-                            location.search.split("term")[1].split("&")[1]
-                        }`
-                    )
+                    changeTerm("month")
                 );
             }
             if (buttonElement.innerText == "최근 3개월") {
                 buttonElement.addEventListener("click", () =>
-                    location.replace(
-                        `https://playentry.org/community/entrystory/list${
-                            location.search.split("term")[0]
-                        }term${
-                            location.search.split("term")[1].split("=")[0]
-                        }=${"month"}&${
-                            location.search.split("term")[1].split("&")[1]
-                        }``https://playentry.org/community/entrystory/list${
-                            location.search.split("term")[0]
-                        }term${
-                            location.search.split("term")[1].split("=")[0]
-                        }=${"quarter"}&${
-                            location.search.split("term")[1].split("&")[1]
-                        }`
-                    )
+                    changeTerm("quarter")
                 );
             }
         });
@@ -419,8 +353,16 @@ function loadEvent() {
 
 function orderV(count, link) {
     console.log(count);
-    if (count != 15) {
-        if (link == location.href) {
+    if (count != 20) {
+        if (
+            `https://playentry.org/community/entrystory/list${
+                location.search.split("sort")[0]
+            }sort${location.search.split("sort")[1].split("=")[0]}=${link}${
+                location.search.split("sort")[1].split("&")[1] == undefined
+                    ? ""
+                    : "&" + location.search.split("sort")[1].split("&")[1]
+            }` == location.href
+        ) {
             isLoad();
         } else {
             setTimeout(() => {
@@ -430,10 +372,56 @@ function orderV(count, link) {
     }
 }
 
+function showError(size) {
+    document.body.style.overflow = "hidden";
+    let background = document.createElement("div");
+    let errorBackground = document.createElement("div");
+    let closeIMG = document.createElement("img");
+    let alarmSpan = document.createElement("span");
+    let sizeSpan = document.createElement("span");
+    let okButton = document.createElement("button");
+    background.id = "blackBackground";
+    errorBackground.id = "errorBackground";
+    closeIMG.src = "/img/IcoPopupClose.svg";
+    alarmSpan.innerText =
+        "이미지 용량이 너무 커서(1MB 초과) 업로드 할 수 없어요.";
+    sizeSpan.innerText = "(해당 파일의 용량은" + size + "mb 입니다.)";
+    okButton.innerText = "확인";
+    sizeSpan.style.fontSize = "14px";
+    sizeSpan.style.color = "#222";
+    sizeSpan.style.marginTop = "1%";
+    okButton.addEventListener("click", function () {
+        this.parentNode.remove();
+        document.querySelector("#blackBackground").remove();
+        document.body.style.removeProperty("overflow");
+    });
+    closeIMG.addEventListener("click", function () {
+        this.parentNode.remove();
+        document.querySelector("#blackBackground").remove();
+        document.body.style.removeProperty("overflow");
+    });
+    document.body.appendChild(background);
+    document.body.appendChild(errorBackground);
+    errorBackground.appendChild(closeIMG);
+    errorBackground.appendChild(alarmSpan);
+    errorBackground.appendChild(sizeSpan);
+    errorBackground.appendChild(okButton);
+}
+
+function changeTerm(term) {
+    location.replace(
+        `https://playentry.org/community/entrystory/list${
+            location.search.split("term")[0]
+        }term${location.search.split("term")[1].split("=")[0]}=${term}&${
+            location.search.split("term")[1].split("&")[1]
+        }`
+    );
+}
+
 function waitLoad(count, oldLink) {
     console.log(oldLink);
     if (
-        count != 15 &&
+        count != 20 &&
         /^https:\/\/(ncc.www)?\.?playentry.org\/community\/entrystory\/list\?.*[^query=.*]$/g.test(
             oldLink
         ) == false
