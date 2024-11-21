@@ -149,15 +149,16 @@
     }
 }
 
-section > div > div > div > h4 {
-    transform: translateY(100%) translateX(5px);
+section > div > div > div > h2 > h4 {
+    transform: translateX(10px);
+    display: inline;
+    font-size: 16px;
     & > a {
         color: rgb(10, 133, 255);
     }
 }
 @media (max-width: 767px) {
-    section > div > div > div > h4 {
-        position: absolute;
-        transform: translateY(-100%) translateX(130px) !important;
+    section > div > div > div > h2 > h4 {
+        transform: translateY(-100%) translateX(140px) !important;
     }
 }

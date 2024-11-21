@@ -1,4 +1,7 @@
 let pressCtrl = false;
+let executed = document.createElement("a");
+executed.id = "executed";
+executed.style.display = "none";
 
 document.addEventListener("keydown", (e) => {
     if (!pressCtrl) {
@@ -199,21 +202,25 @@ function LinkToImage() {
 /**
  * 이미지 업로드 버튼을 추가하는 함수
  */
-function CreateUploadButton() {
-    ImageUploadsButton = document
-        .querySelector(
-            'html>body>div[id="__next"]>div>div[class^="nextInner"]>div>section>div>div>div>div>div>div>div>a'
-        )
-        .cloneNode(true);
-    ImageUploadsButton.className = "imageUpload";
-    ImageUploadsButton.addEventListener("click", () => {
-        uploadImage(document.querySelector("textarea"));
-    });
-    document
-        .querySelector(
-            'html>body>div[id="__next"]>div>div[class^="nextInner"]>div>section>div>div>div>div>div>div>div'
-        )
-        .prepend(ImageUploadsButton);
+function CreateUploadButton(maxLoop) {
+    try {
+        ImageUploadsButton = document
+            .querySelector(
+                'html>body>div[id="__next"]>div>div[class^="nextInner"]>div>section>div>div>div>div>div>div>div>a'
+            )
+            .cloneNode(true);
+        ImageUploadsButton.className = "imageUpload";
+        ImageUploadsButton.addEventListener("click", () => {
+            uploadImage(document.querySelector("textarea"));
+        });
+        document
+            .querySelector(
+                'html>body>div[id="__next"]>div>div[class^="nextInner"]>div>section>div>div>div>div>div>div>div'
+            )
+            .prepend(ImageUploadsButton);
+    } catch {
+        if (maxLoop != 20) setTimeout(CreateUploadButton(maxLoop + 1), 100);
+    }
 }
 
 /**
@@ -227,7 +234,11 @@ function isLoad(cp = 0) {
                 console.log("none");
             }, 20);
         } else {
-            loadEvent();
+            try {
+                loadEvent();
+            } catch {
+                setTimeout(isLoad, 100);
+            }
             console.log(document.querySelector("button"));
         }
     }
@@ -237,19 +248,25 @@ function isLoad(cp = 0) {
  * 각종 이벤트를 추가하는 함수
  */
 function loadEvent() {
-    try {
-        CreateUploadButton();
-    } catch {
-        console.log("업로드 버튼을 만들 수 없는 환경.");
-    }
+    CreateUploadButton(0);
     LinkToImage();
+    executed.remove();
+    document
+        .querySelector(
+            "div > div > div > div > div > div:has(>span>a,>div>div>a[role='button'])"
+        ) // 이랬는데 뚫리면 좀 레전드일 듯
+        .appendChild(executed);
+    document.querySelector("section > div > div > div > h2").innerText =
+        "엔트리 이야기";
     const pastaWaterMark = document.createElement("h4");
     pastaWaterMark.innerText = "With ";
     const pastaLink = document.createElement("a");
     pastaLink.innerText = "pasta";
     pastaLink.href = "https://github.com/EntryFireRun/pasta/releases/";
     pastaWaterMark.appendChild(pastaLink);
-    document.querySelector("section > div > div > div").append(pastaWaterMark);
+    document
+        .querySelector("section > div > div > div > h2")
+        .append(pastaWaterMark);
     let SeeWebPG = new MutationObserver(() => {
         if (
             /^https?:\/\/.*\playentry\.org\/community\/entrystory\/list\?.*$/.test(
@@ -303,73 +320,6 @@ function loadEvent() {
     } catch {
         // 모바일에서는 버그 남
     }
-    document
-        .querySelectorAll('li > a[role="button"]')
-        .forEach((buttonElement) => {
-            // 케이스 문 없이 만드는 쌈@뽕한 코딩
-            if (buttonElement.innerText == "정확도순") {
-                buttonElement.addEventListener("click", () =>
-                    orderV(0, "score")
-                );
-            }
-            if (buttonElement.innerText == "최신순") {
-                buttonElement.addEventListener("click", () =>
-                    orderV(0, "created")
-                );
-            }
-            // if (i.innerText == '조회순) `${location.search.split('sort')[0]}sort${location.search.split('sort')[1].split('=')[0]}=${'visit'}${location.search.split('sort')[1].split('&')[1] == undefined ? "" : '&' + location.search.split('sort')[1].split('&')[1]}`
-            if (buttonElement.innerText == "댓글순") {
-                buttonElement.addEventListener("click", () =>
-                    orderV(0, "commentsLength")
-                );
-            }
-            if (buttonElement.innerText == "좋아요순") {
-                buttonElement.addEventListener("click", () =>
-                    orderV(0, "likesLength")
-                );
-            }
-            if (buttonElement.innerText == "오늘") {
-                buttonElement.addEventListener("click", () =>
-                    changeTerm("today")
-                );
-            }
-            if (buttonElement.innerText == "최근 1주일") {
-                buttonElement.addEventListener("click", () =>
-                    changeTerm("week")
-                );
-            }
-            if (buttonElement.innerText == "최근 1개월") {
-                buttonElement.addEventListener("click", () =>
-                    changeTerm("month")
-                );
-            }
-            if (buttonElement.innerText == "최근 3개월") {
-                buttonElement.addEventListener("click", () =>
-                    changeTerm("quarter")
-                );
-            }
-        });
-}
-
-function orderV(count, link) {
-    console.log(count);
-    if (count != 20) {
-        if (
-            `https://playentry.org/community/entrystory/list${
-                location.search.split("sort")[0]
-            }sort${location.search.split("sort")[1].split("=")[0]}=${link}${
-                location.search.split("sort")[1].split("&")[1] == undefined
-                    ? ""
-                    : "&" + location.search.split("sort")[1].split("&")[1]
-            }` == location.href
-        ) {
-            isLoad();
-        } else {
-            setTimeout(() => {
-                orderV(count + 1, link);
-            }, 100);
-        }
-    }
 }
 
 function showError(size) {
@@ -408,61 +358,16 @@ function showError(size) {
     errorBackground.appendChild(okButton);
 }
 
-function changeTerm(term) {
-    location.replace(
-        `https://playentry.org/community/entrystory/list${
-            location.search.split("term")[0]
-        }term${location.search.split("term")[1].split("=")[0]}=${term}&${
-            location.search.split("term")[1].split("&")[1]
-        }`
-    );
-}
-
-function waitLoad(count, oldLink) {
-    console.log(oldLink);
-    if (
-        count != 20 &&
-        /^https:\/\/(ncc.www)?\.?playentry.org\/community\/entrystory\/list\?.*[^query=.*]$/g.test(
-            oldLink
-        ) == false
-    ) {
-        if (
-            /^https:\/\/(ncc.www)?\.?playentry.org\/community\/entrystory\/list\?.*[^query=.*]$/g.test(
-                location.href
-            )
-        ) {
-            console.log("test");
-            isLoad();
-        } else {
-            setTimeout(() => {
-                waitLoad(count + 1, oldLink);
-            }, 100);
-        }
+chrome.runtime.onMessage.addListener(() => {
+    if (!document.querySelector("#executed")) {
+        isLoad();
+        document.body.appendChild(executed); // 가장 먼저 급한 불을 끕니다
+        console.log("%c파스타 켜짐", "font-size: 50px");
     }
-}
-
-if (
-    /^https:\/\/(ncc.www)?\.?playentry.org\/community\/entrystory\/list\?.*$/g.test(
-        location.href
-    )
-) {
-    isLoad();
-}
-
-document
-    .querySelectorAll("header > div > div > div > ul > li > a")
-    .forEach((i) => {
-        if (i.innerText == "엔트리 이야기" && i.className != "anjffhwjdgkwl") {
-            i.className = "anjffhwjdgkwl";
-            i.addEventListener("click", () => {
-                waitLoad(0, location.href);
-            });
-        }
-    });
-
-window.addEventListener("popstate", () => {
-    console.log(location.href);
-    waitLoad(0, location.href);
 });
 
-console.log("%c파스타 켜짐", "font-size: 100px");
+if (location.href.startsWith("https://playentry.org/community/entrystory")) {
+    isLoad();
+    document.body.appendChild(executed); // 가장 먼저 급한 불을 끕니다
+    console.log("%c파스타 켜짐", "font-size: 50px");
+}
